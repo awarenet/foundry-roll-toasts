@@ -12,10 +12,14 @@
         "minimum": "0.7.9",
         "verified": "12"
     },
+
     "styles": [
         "styles/toasts.css"
     ],
     "esmodules": [
         "scripts/index.js"
-    ]
+    ],
+    "manifest": "https://github.com/awarenet/foundry-roll-toasts/releases/download/v0.1.0/module.json",
+    "download": "https://github.com/awarenet/foundry-roll-toasts/releases/download/v0.1.0/foundry-roll-toasts-v0.1.0.zip",
+    "url": "https://github.com/awarenet/foundry-roll-toasts"
 }
