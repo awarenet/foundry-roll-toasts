@@ -11,14 +11,36 @@ Hooks.once('init', () => {
 const abilityskillCheck = (actor, roll) => {
     //if(!isChatActive()){
         let id =`${actor._id}-${roll._total}-${Date.now()}`
-        showToast({id: id, img: actor.img, title: roll.options.flavor, result: roll._total, name: actor.name})
+        const toast  = {
+            id: id, 
+            img: actor.img, 
+            title: roll.options.flavor, 
+            result: roll._total, 
+            name: actor.name,
+            adv: roll.hasAdvantage,
+            dis: roll.hasDisadvantage,
+            crit: roll.isCritical,
+            fail: roll.isFumble
+        }
+        showToast(toast)
     //}
 }
 
 const itemCheck = (item, roll) => {
     //if(!isChatActive()){
         let id =`${item._id}-${roll._total}-${Date.now()}`
-        showToast({id: id, img: item.parent.img, title: roll.options.flavor, result: roll._total, name: item.parent.name})
+        const toast  = {
+            id: id, 
+            img: item.parent.img, 
+            title: roll.options.flavor, 
+            result: roll._total, 
+            name: item.parent.name,
+            adv: roll.hasAdvantage,
+            dis: roll.hasDisadvantage,
+            crit: roll.isCritical,
+            fail: roll.isFumble
+        }
+        showToast(toast)
     //}
 }
 const isChatActive = () => {

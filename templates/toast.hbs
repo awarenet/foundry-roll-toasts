@@ -6,7 +6,18 @@
         <div class="class roboto-upper">{{name}}</div>
         <span>{{title}}</span>
     </div>
-    <div class="bigText" style="flex-shrink:1">
-        <span>{{result}}</span>
+    <div style="flex-shrink:2">
+        <div class="bigText">
+            <span {{#if crit}}style="color:green"{{/if}} {{#if fail}}style="color:red"{{/if}}>{{result}}</span>
+        </div>
+        {{#if advantage}}
+            <i class="fa fa-angle-double-up"></i>
+        {{/if}}
+        {{#if disadvantage}}
+            <i class="fa fa-angle-double-down"></i>
+        {{/if}}
+
     </div>
+
+
 </li>

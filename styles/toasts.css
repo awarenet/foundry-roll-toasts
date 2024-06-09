@@ -39,6 +39,7 @@
     line-height: 1em;
     text-anchor: middle;
     vertical-align: middle;
+    display: inline;
 }
 
 .imagestack{
