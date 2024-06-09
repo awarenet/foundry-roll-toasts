@@ -1,0 +1,21 @@
+{
+    "name": "roll-toast",
+    "title": "Roll Toasts",
+    "description": "A module to show toast alerts for rolls",
+    "authors": [
+        {
+            "name": "Habitweb"
+        }
+    ],
+    "version": "1.0",
+    "compatibility": {
+        "minimum": "0.7.9",
+        "verified": "12"
+    },
+    "styles": [
+        "styles/toasts.css"
+    ],
+    "esmodules": [
+        "scripts/index.js"
+    ]
+}
