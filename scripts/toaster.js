@@ -29,7 +29,7 @@ class RollToast {
         document.getElementById(this.id).addEventListener('click', (ev) => {
             this.remove();
         });
-        setTimeout(this.remove, 3000);
+        //setTimeout(this.remove, 3000);
     }
 
 
