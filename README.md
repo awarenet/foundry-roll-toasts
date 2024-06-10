@@ -1,8 +1,12 @@
 # Roll Toasts
 Are you sick of switching to the chat log to see a roll result? I know I was!
-![main screenshot](screens/main.png)
+
 
 Roll Toasts is a module for DnD 5E System that allows the user to see rolls in a toast notification feed.
+Each toast notification is a simple view of the character, roll type and result (including adv. and dis. markers).
+
+![main screenshot](screens/main.png)
+
 Setup is per user and allows you to filter what you want and don't want to see.
 
 ![settings screens](screens/settings.png)
