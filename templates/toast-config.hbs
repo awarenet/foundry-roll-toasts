@@ -1,0 +1,63 @@
+<div>
+    <ul class="permissions-list">
+        <h3>General</h3>
+        <li class="permission form-group">
+            <label class="index">{{localize "ROLLTOAST.enable"}}</label>
+            <input type="checkbox" name="enable" {{checked enable}}>
+
+        </li>
+        <li class="permission form-group">
+            <label class="index">{{localize "ROLLTOAST.chatShow"}}</label>
+            <input type="checkbox" name="chatShow" {{checked chatShow}}>
+        </li>
+
+        <li class="permission form-group">
+            <label class="index">{{localize "ROLLTOAST.toastTimeout"}}</label>
+            <input type="number" name="toastTimeout" value="{{toastTimeout}}">
+        </li>
+        <h3>Rollers</h3>
+        <li class="permission form-group">
+            <label class="index">{{localize "ROLLTOAST.showOwn"}}</label>
+            <input type="checkbox" name="showOwn" {{checked showOwn}}>
+        </li>
+        <li class="permission form-group">
+            <label class="index">{{localize "ROLLTOAST.showOthers"}}</label>
+            <input type="checkbox" name="showOthers" {{checked showOthers}}>
+        </li>
+        <h3>Roll Types</h3>
+        <div class="groupedForm">
+            <li class="permission form-group">
+                <label class="index">{{localize "ROLLTOAST.showForInitiative"}}</label>
+                <input {{#unless enable}}disabled{{/unless}} type="checkbox" name="initiative" {{checked initiative}}>
+            </li>
+            <li class="permission form-group">
+                <label class="index">{{localize "ROLLTOAST.showForAttacks"}}</label>
+                <input type="checkbox" name="attacks" {{checked attacks}}>
+            </li>
+            <li class="permission form-group">
+                <label class="index">{{localize "ROLLTOAST.showForDamage"}}</label>
+                <input type="checkbox" name="damage" {{checked damage}}>
+            </li>
+            <li class="permission form-group">
+                <label class="index">{{localize "ROLLTOAST.showAbilityChecks"}}</label>
+                <input type="checkbox" name="abilities" {{checked abilities}}>
+            </li>
+            <li class="permission form-group">
+                <label class="index">{{localize "ROLLTOAST.showSkillChecks"}}</label>
+                <input type="checkbox" name="skill" {{checked skill}}>
+            </li>
+            <li class="permission form-group">
+                <label class="index">{{localize "ROLLTOAST.showToolChecks"}}</label>
+                <input type="checkbox" name="tool" {{checked tool}}>
+            </li>
+        </div>
+
+    </ul>
+
+    <footer class="form-footer">
+        <button type="submit">
+            <i class="fa-solid fa-save" inert></i>
+            <label inert>{{localize "ROLLTOAST.submit"}}</label>
+        </button>
+    </footer>
+</div>

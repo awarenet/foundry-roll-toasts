@@ -42,10 +42,10 @@
     display: inline;
 }
 
-.imagestack{
+.imagestack {
     display: flex;
-    flex-direction: column; /* NEW */
+    flex-direction: column;
     justify-content: center;
     vertical-align: top;
     text-align: left;
-  }
+}

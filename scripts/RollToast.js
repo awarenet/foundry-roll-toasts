@@ -3,23 +3,18 @@ import anime from './anime.es.js';
 const notifyTemplate = "modules/roll-toast/templates/toast.hbs"
 loadTemplates([notifyTemplate])
 
-
-export const showToast = async ({ id, img, title, result, name,adv,dis,crit,fail }) => {
-    const toast = new RollToast(id, img, title, result, name,adv,dis,crit,fail );
-    toast.show();
-}
-
-class RollToast {
-    constructor(id, img, title, result, name,adv,dis,crit,fail) {
+export class RollToast {
+    constructor(id, img, title, result, name, adv, dis, crit, fail, timeout) {
         this.id = id,
-        this.img = img,
-        this.title = title,
-        this.result = result
+            this.img = img,
+            this.title = title,
+            this.result = result
         this.name = name
         this.advantage = adv
-        this.disadvantage =dis
-        this.crit= crit,
-        this.fail = fail
+        this.disadvantage = dis
+        this.crit = crit,
+            this.fail = fail
+        this.timeout = timeout
     }
 
     show = async () => {
@@ -29,7 +24,7 @@ class RollToast {
         document.getElementById(this.id).addEventListener('click', (ev) => {
             this.remove();
         });
-        setTimeout(this.remove, 3000);
+        setTimeout(this.remove, this.timeout);
     }
 
 
@@ -40,7 +35,9 @@ class RollToast {
             translateX: -400,
             duration: 1500,
             complete: () => {
-                ele.remove();
+                if (ele) {
+                    ele.remove();
+                }
             }
         })
         anim.play()

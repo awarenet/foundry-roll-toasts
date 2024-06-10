@@ -4,12 +4,13 @@
     "description": "A module to show toast alerts for rolls",
     "authors": [
         {
-            "name": "Habitweb"
+            "name": "awarenet"
         }
     ],
-    "version": "0.2.0",
+    "socket": true,
+    "version": "1.0.0",
     "compatibility": {
-        "minimum": "0.7.9",
+        "minimum": "11",
         "verified": "12"
     },
 
@@ -19,7 +20,14 @@
     "esmodules": [
         "scripts/index.js"
     ],
+    "languages": [
+        {
+            "lang": "en",
+            "name": "English",
+            "path": "languages/en.json"
+        }
+    ],
     "manifest": "https://github.com/awarenet/foundry-roll-toasts/releases/download/latest/module.json",
-    "download": "https://github.com/awarenet/foundry-roll-toasts/releases/download/latest/foundry-roll-toasts-v0.2.0.zip",
+    "download": "https://github.com/awarenet/foundry-roll-toasts/releases/download/latest/foundry-roll-toasts-v1.0.0.zip",
     "url": "https://github.com/awarenet/foundry-roll-toasts"
 }

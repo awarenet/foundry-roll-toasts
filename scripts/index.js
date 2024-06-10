@@ -1,81 +1,23 @@
-import {showToast} from './toaster.js'
+
+import { moduleId } from './utils.js';
+import { RollToastConfigurationForm } from './RollToastConfigurationForm.js'
+import { RollToastController } from './RollToastController.js';
 CONFIG.debug.hooks = true
 Hooks.once('init', () => {
-    console.log('adding div');
     var elemDiv = document.createElement('ol');
     elemDiv.id = "toast-container"
     document.body.appendChild(elemDiv)
+    game.settings.registerMenu(moduleId, "rollToastsMenu", {
+        name: "Roll Toasts",
+        label: "User Setup",      // The text label used in the button
+        icon: "fas fa-bars",               // A Font Awesome icon used in the submenu button
+        type: RollToastConfigurationForm,   // A FormApplication subclass
+        restricted: false                   // Restrict this submenu to gamemaster only?
+    });
+
+});
+Hooks.once('ready', () => {
+    new RollToastController();
 });
 
-
-const abilityskillCheck = (actor, roll) => {
-    //if(!isChatActive()){
-        let id =`${actor._id}-${roll._total}-${Date.now()}`
-        const toast  = {
-            id: id, 
-            img: actor.img, 
-            title: roll.options.flavor, 
-            result: roll._total, 
-            name: actor.name,
-            adv: roll.hasAdvantage,
-            dis: roll.hasDisadvantage,
-            crit: roll.isCritical,
-            fail: roll.isFumble
-        }
-        showToast(toast)
-    //}
-}
-
-const itemCheck = (item, roll) => {
-    //if(!isChatActive()){
-        let id =`${item._id}-${roll._total}-${Date.now()}`
-        const toast  = {
-            id: id, 
-            img: item.parent.img, 
-            title: roll.options.flavor, 
-            result: roll._total, 
-            name: item.parent.name,
-            adv: roll.hasAdvantage,
-            dis: roll.hasDisadvantage,
-            crit: roll.isCritical,
-            fail: roll.isFumble
-        }
-        showToast(toast)
-    //}
-}
-const isChatActive = () => {
-    const chat = document.querySelector('.active[data-tab="chat"]');
-    return chat != null;
-}
-
-
-// ROLL Hooks
-Hooks.on('dnd5e.rollAbilitySave',(actor, roll) => {
-    abilityskillCheck(actor,roll);
-})
-Hooks.on('dnd5e.rollAttack',(item, roll) => {
-    itemCheck(item,roll);
-})
-Hooks.on('dnd5e.rollDamage',(item, roll) => {
-    itemCheck(item,roll);
-})
-Hooks.on('dnd5e.rollToolCheck',(actor, roll) => {
-    abilityskillCheck(actor,roll);
-})
-Hooks.on('dnd5e.rollAbilityTest', (actor, roll) => {
-    abilityskillCheck(actor,roll);
-})
-Hooks.on('dnd5e.rollSkill', (actor,roll) => {
-    abilityskillCheck(actor,roll);
-})
-
-Hooks.on('dnd5e.rollInitiative', (actor,combatants) => {
-    if(!isChatActive()){
-        combatants.forEach((combatant) => {
-            let id = `${combatant.actorId}-${combatant.initiative}-${Date.now()}`
-            showToast({id: id, img: combatant.img, title: "Intiative", result: combatant.initiative, name: combatant.name})
-        })
-        
-    }
-})
 
