@@ -2,7 +2,7 @@
 import { moduleId } from './utils.js';
 import { RollToastConfigurationForm } from './RollToastConfigurationForm.js'
 import { RollToastController } from './RollToastController.js';
-CONFIG.debug.hooks = true
+//CONFIG.debug.hooks = true
 Hooks.once('init', () => {
     var elemDiv = document.createElement('ol');
     elemDiv.id = "toast-container"
