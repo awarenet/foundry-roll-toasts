@@ -1,6 +1,6 @@
 import { RollToast } from "./RollToast.js";
 import { flagId, isChatActive, moduleId, ROLLCONFIG_DEFAULT, Types } from "./utils.js";
-
+const PUBLIC_ROLL = 'publicroll'
 export class RollToastController {
     constructor() {
         this.hookIndex = {}
@@ -65,14 +65,15 @@ export class RollToastController {
                 Hooks.on('dnd5e.rollInitiative', (actor, combatants) => {
                     let toasts = this.initiativeCheck(actor, combatants);
                     toasts && toasts.forEach(x => this.sendToHook(x))
-                    
                 });
         }
 
     }
 
     sendToHook = (toast) => {
-        game.socket.emit(`module.${moduleId}`, toast)
+        if(toast.public){
+            game.socket.emit(`module.${moduleId}`, toast)
+        }
         if(this.toastSettings.showOwn){
             Hooks.call(`${moduleId}.postatoast`,toast)
         }
@@ -134,7 +135,8 @@ export class RollToastController {
             dis: roll.hasDisadvantage,
             crit: roll.isCritical,
             fail: roll.isFumble,
-            type: type
+            type: type,
+            public: (roll.options.rollMode == PUBLIC_ROLL && actor.type == "character")
         }
         return toast;
     }
@@ -152,7 +154,8 @@ export class RollToastController {
             dis: roll.hasDisadvantage,
             crit: roll.isCritical,
             fail: roll.isFumble,
-            type: type
+            type: type,
+            public: (roll.options.rollMode == PUBLIC_ROLL && actor.type == "character")
         }
         return toast;
     }
@@ -170,7 +173,8 @@ export class RollToastController {
                 dis: false,
                 crit: false,
                 fail: false,
-                type: Types.INI
+                type: Types.INI,
+                public: true
             }
         })
     }
