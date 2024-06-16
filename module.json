@@ -8,7 +8,7 @@
         }
     ],
     "socket": true,
-    "version": "1.0.0",
+    "version": "#{VERSION}#",
     "compatibility": {
         "minimum": "12",
         "verified": "12"
@@ -27,7 +27,7 @@
             "path": "languages/en.json"
         }
     ],
-    "manifest": "https://github.com/awarenet/foundry-roll-toasts/releases/download/latest/module.json",
-    "download": "https://github.com/awarenet/foundry-roll-toasts/releases/download/latest/foundry-roll-toasts-v1.0.0.zip",
-    "url": "https://github.com/awarenet/foundry-roll-toasts"
+    "manifest": "#{MANIFEST}#",
+    "download": "#{DOWNLOAD}#",
+    "url": "#{url}#"
 }
