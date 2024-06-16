@@ -139,3 +139,26 @@ jobs:
           artifacts: './module.json, ./module.zip'
           tag: ${{ github.event.release.tag_name }}
           body: ${{ github.event.release.body }}
+
+      - name: Update Foundry Package
+        uses: fjogeleit/http-request-action@v1
+        with:
+          url: 'https://api.foundryvtt.com/_api/packages/release_version/'
+          method: 'POST'
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'fvttp_...'
+          },
+          customHeaders: '{"Content-Type": "application/json", "Authorization": "${{secrets.API_KEY_FVTT}}"'
+          data: '{
+                    "id": "roll-toast", 
+                    "release": {"version":"v${{steps.get_version.outputs.version-without-v}},
+                    "manifest": "${{ env.latest_manifest_url }}",
+                    "notes": ${{ env.latest_manifest_url }},
+                    "compatibility": {
+                      "minimum": "12",
+                      "verified": "12",
+                      "maximum": "12"
+                    }
+                  }
+                }'
