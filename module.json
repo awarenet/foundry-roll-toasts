@@ -29,5 +29,5 @@
     ],
     "manifest": "#{MANIFEST}#",
     "download": "#{DOWNLOAD}#",
-    "url": "#{url}#"
+    "url": "#{URL}#"
 }
