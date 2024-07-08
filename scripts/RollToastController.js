@@ -144,6 +144,7 @@ export class RollToastController {
     itemCheck = (item, roll, type) => {
         //if(!isChatActive()){
         let id = `${item._id}-${roll._total}-${Date.now()}`
+        let actor = item.actor;
         const toast = {
             id: id,
             img: item.parent.img,
