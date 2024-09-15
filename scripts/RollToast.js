@@ -6,14 +6,14 @@ loadTemplates([notifyTemplate])
 export class RollToast {
     constructor(id, img, title, result, name, adv, dis, crit, fail, timeout) {
         this.id = id,
-            this.img = img,
-            this.title = title,
-            this.result = result
+        this.img = img,
+        this.title = title,
+        this.result = result
         this.name = name
         this.advantage = adv
         this.disadvantage = dis
         this.crit = crit,
-            this.fail = fail
+        this.fail = fail
         this.timeout = timeout
     }
 
