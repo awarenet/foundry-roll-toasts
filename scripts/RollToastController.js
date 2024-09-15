@@ -1,7 +1,6 @@
 import { RollToast } from "./RollToast.js";
-import { flagId, isChatActive, moduleId, ROLLCONFIG_DEFAULT, Types, System } from "./utils.js";
-const PUBLIC_ROLL = 'publicroll'
-const GM_ONLY_ROLL = 'gmroll'
+import { flagId, isChatActive, moduleId, ROLLCONFIG_DEFAULT_OPTIONS, System } from "./utils.js";
+
 
 export class RollToastController {
     constructor() {
@@ -23,7 +22,9 @@ export class RollToastController {
 
     init = async () => {
         this.gameSystem = Object.values(System).filter(x => x.id == game.system.id)[0];
-        this.toastSettings = game.user.flags[moduleId][flagId];
+        if(game.user.flags[moduleId]){
+            this.toastSettings = game.user.flags[moduleId][flagId];
+        }
         if (!this.toastSettings) {
             game.user.setFlag(moduleId, flagId, { ...ROLLCONFIG_DEFAULT_OPTIONS, ...this.gameSystem.options }).then(x => {
                 Hooks.call(`${moduleId}.settings`)
@@ -43,6 +44,7 @@ export class RollToastController {
     }
 
     sendToHook = (toast) => {
+        console.log(toast)
         if(toast.shouldSend){
             game.socket.emit(`module.${moduleId}`, toast)
         }
@@ -98,67 +100,4 @@ export class RollToastController {
         }
     }
 
-    shouldItGo = (roll,actor) => {
-        return ((roll.options.rollMode == PUBLIC_ROLL || roll.options.rollMode == GM_ONLY_ROLL)&& actor.type == "character")
-    }
-
-    abilityskillCheck = (actor, roll, type) => {
-        let id = `${actor._id}-${roll._total}-${Date.now()}`
-        const toast = {
-            id: id,
-            img: actor.img,
-            title: roll.options.flavor,
-            result: roll._total,
-            name: actor.name,
-            adv: roll.hasAdvantage,
-            dis: roll.hasDisadvantage,
-            crit: roll.isCritical,
-            fail: roll.isFumble,
-            type: type,
-            shouldSend: this.shouldItGo(roll,actor),
-            gmOnly: (roll.options.rollMode == GM_ONLY_ROLL && actor.type == "character"),
-        }
-        return toast;
-    }
-
-    itemCheck = (item, roll, type) => {
-        //if(!isChatActive()){
-        let id = `${item._id}-${roll._total}-${Date.now()}`
-        let actor = item.actor;
-        const toast = {
-            id: id,
-            img: item.parent.img,
-            title: roll.options.flavor,
-            result: roll._total,
-            name: item.parent.name,
-            adv: roll.hasAdvantage,
-            dis: roll.hasDisadvantage,
-            crit: roll.isCritical,
-            fail: roll.isFumble,
-            type: type,
-            shouldSend: this.shouldItGo(roll,actor),
-            gmOnly: (roll.options.rollMode == GM_ONLY_ROLL && actor.type == "character"),
-        }
-        return toast;
-    }
-
-    initiativeCheck = (actor, combatants) => {
-        return combatants.map((combatant) => {
-            let id = `${combatant.actorId}-${combatant.initiative}-${Date.now()}`
-            return {
-                id: id,
-                img: combatant.img,
-                title: "Intiative",
-                result: combatant.initiative,
-                name: combatant.name,
-                adv: false,
-                dis: false,
-                crit: false,
-                fail: false,
-                type: Types.INI,
-                shouldSend: true,
-                gmOnly: false
-            }
-        })
-    }
 }

@@ -1,5 +1,5 @@
 import { RollToastController } from "./RollToastController.js";
-import { System, PUBLIC_ROLL } from "./utils.js";
+import { System } from "./utils.js";
 
 export class Pf2eRollToastController extends RollToastController {
 
@@ -10,6 +10,10 @@ export class Pf2eRollToastController extends RollToastController {
             this.types = System.PF2E.types;
         }
 
+    }
+
+    isGM = (data) => {
+        return data.whisper.length == 1 && game.users.activeGM._id == data.whisper[0]
     }
 
     addListeners = () => {
@@ -28,7 +32,8 @@ export class Pf2eRollToastController extends RollToastController {
                     crit: false,
                     fail: false,
                     type: innerData.type,
-                    public: (data.whisper.length == 0 && data.actor.type == "character")
+                    shouldSend: ((data.whisper.length == 0 || this.isGM(data)) && data.actor.type == "character"),
+                    gmOnly: this.isGM(data)
                 }
 
                 this.sendToHook(toast)
