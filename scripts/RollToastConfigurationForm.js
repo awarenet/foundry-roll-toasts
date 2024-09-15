@@ -19,9 +19,8 @@ export class RollToastConfigurationForm extends HandlebarsApplicationMixin(Appli
     }
 
     static async submission(event, form, formData) {
-        await game.user.unsetFlag(moduleId,flagId)
-        // await game.user.setFlag(moduleId,flagId,formData.object)
-        // Hooks.call(`${moduleId}.settings`)
+        await game.user.setFlag(moduleId,flagId,formData.object)
+        Hooks.call(`${moduleId}.settings`)
     }
 
     static PARTS = {
