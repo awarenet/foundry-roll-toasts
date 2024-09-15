@@ -1,8 +1,27 @@
 
-import { moduleId } from './utils.js';
+import { moduleId,System } from './utils.js';
 import { RollToastConfigurationForm } from './RollToastConfigurationForm.js'
-import { RollToastController } from './RollToastController.js';
-//CONFIG.debug.hooks = true
+import {DnD5eRollToastController } from './DnD5eRollToastController.js'
+import { Pf2eRollToastController } from './Pf2eRollToastController.js';
+
+var rollToastController;
+const setup = () => { 
+    if(rollToastController!=null){
+        rollToastController.destroy()
+    }
+    rollToastController = null;
+    switch(game.system.id){
+        case(System.DND5E.id):
+            rollToastController = new DnD5eRollToastController();
+            break;
+        case(System.PF2E.id):
+            rollToastController = new Pf2eRollToastController();
+            break;
+        default:
+            console.log("No Valid system for roll toasts.")
+    }
+}
+// CONFIG.debug.hooks = true
 Hooks.once('init', () => {
     var elemDiv = document.createElement('ol');
     elemDiv.id = "toast-container"
@@ -16,8 +35,6 @@ Hooks.once('init', () => {
     });
 
 });
-Hooks.once('ready', () => {
-    new RollToastController();
-});
-
+Hooks.once('ready', setup);
+Hooks.on(`${moduleId}.settings`, setup)
 
