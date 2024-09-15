@@ -1,6 +1,7 @@
 import { RollToast } from "./RollToast.js";
 import { flagId, isChatActive, moduleId, ROLLCONFIG_DEFAULT, Types } from "./utils.js";
 const PUBLIC_ROLL = 'publicroll'
+const GM_ONLY_ROLL = 'gmroll'
 export class RollToastController {
     constructor() {
         this.hookIndex = {}
@@ -71,7 +72,7 @@ export class RollToastController {
     }
 
     sendToHook = (toast) => {
-        if(toast.public){
+        if(toast.shouldSend){
             game.socket.emit(`module.${moduleId}`, toast)
         }
         if(this.toastSettings.showOwn){
@@ -79,6 +80,9 @@ export class RollToastController {
         }
     }
     socketReceived = (toast) => {
+        if(toast.gmOnly && !game.user.isGM){
+            return;
+        }
         if(this.toastSettings.showOthers){
             Hooks.call(`${moduleId}.postatoast`,toast)
         }
@@ -123,6 +127,10 @@ export class RollToastController {
         }
     }
 
+    shouldItGo = (roll,actor) => {
+        return ((roll.options.rollMode == PUBLIC_ROLL || roll.options.rollMode == GM_ONLY_ROLL)&& actor.type == "character")
+    }
+
     abilityskillCheck = (actor, roll, type) => {
         let id = `${actor._id}-${roll._total}-${Date.now()}`
         const toast = {
@@ -136,7 +144,8 @@ export class RollToastController {
             crit: roll.isCritical,
             fail: roll.isFumble,
             type: type,
-            public: (roll.options.rollMode == PUBLIC_ROLL && actor.type == "character")
+            shouldSend: this.shouldItGo(roll,actor),
+            gmOnly: (roll.options.rollMode == GM_ONLY_ROLL && actor.type == "character"),
         }
         return toast;
     }
@@ -156,7 +165,8 @@ export class RollToastController {
             crit: roll.isCritical,
             fail: roll.isFumble,
             type: type,
-            public: (roll.options.rollMode == PUBLIC_ROLL && actor.type == "character")
+            shouldSend: this.shouldItGo(roll,actor),
+            gmOnly: (roll.options.rollMode == GM_ONLY_ROLL && actor.type == "character"),
         }
         return toast;
     }
@@ -175,7 +185,8 @@ export class RollToastController {
                 crit: false,
                 fail: false,
                 type: Types.INI,
-                public: true
+                shouldSend: true,
+                gmOnly: false
             }
         })
     }
