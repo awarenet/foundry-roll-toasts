@@ -1,7 +1,8 @@
 import { RollToast } from "./RollToast.js";
-import { flagId, isChatActive, moduleId, ROLLCONFIG_DEFAULT, Types } from "./utils.js";
+import { flagId, isChatActive, moduleId, ROLLCONFIG_DEFAULT, Types, System } from "./utils.js";
 const PUBLIC_ROLL = 'publicroll'
 const GM_ONLY_ROLL = 'gmroll'
+
 export class RollToastController {
     constructor() {
         this.hookIndex = {}
@@ -9,65 +10,35 @@ export class RollToastController {
             this.socketReceived(toast);
         })
         this.init();
-        Hooks.on(`${moduleId}.settings`, this.init.bind(this))
     }
 
-    init = () => {
-        this.toastSettings = game.user.flags[moduleId][flagId];
-        if (!this.toastSettings) {
-            this.toastSettings = ROLLCONFIG_DEFAULT;
-        }
-        //clear all hooks and readd
+    destroy = () => { 
         if (this.hookIndex) {
             for (const [key, value] of Object.entries(this.hookIndex)) {
                 Hooks.off(key, value)
             }
             this.hookIndex = {}
         }
-        
-        //only adds hooks if we have roll toasts enabled.
-        if (this.toastSettings.enable) {
-            // ROLL Hooks
-            this.hookIndex[`${moduleId}.postatoast`] = 
-                Hooks.on(`${moduleId}.postatoast`,(toast) => {
-                    this.sendIt(toast);
-                })
-            this.hookIndex['dnd5e.rollAbilitySave'] =
-                Hooks.on('dnd5e.rollAbilitySave', (actor, roll) => {
-                    let toast = this.abilityskillCheck(actor, roll, Types.ABI);
-                    this.sendToHook(toast)
-                });
-            this.hookIndex['dnd5e.rollAttack'] =
-                Hooks.on('dnd5e.rollAttack', (item, roll) => {
-                    let toast = this.itemCheck(item, roll, Types.ATT);
-                    this.sendToHook(toast)
-                })
-            this.hookIndex['dnd5e.rollDamage'] =
-                Hooks.on('dnd5e.rollDamage', (item, roll) => {
-                    let toast = this.itemCheck(item, roll, Types.DMG);
-                    this.sendToHook(toast)
-                })
-            this.hookIndex['dnd5e.rollToolCheck'] =
-                Hooks.on('dnd5e.rollToolCheck', (actor, roll) => {
-                    let toast = this.abilityskillCheck(actor, roll, Types.TOOL);
-                    this.sendToHook(toast)
-                })
-            this.hookIndex['dnd5e.rollAbilityTest'] =
-                Hooks.on('dnd5e.rollAbilityTest', (actor, roll) => {
-                    let toast = this.abilityskillCheck(actor, roll, Types.ABI);
-                    this.sendToHook(toast)
-                })
-            this.hookIndex['dnd5e.rollSkill'] =
-                Hooks.on('dnd5e.rollSkill', (actor, roll) => {
-                    let toast = this.abilityskillCheck(actor, roll, Types.SKI);
-                    this.sendToHook(toast)
-                })
-            this.hookIndex['dnd5e.rollInitiative'] =
-                Hooks.on('dnd5e.rollInitiative', (actor, combatants) => {
-                    let toasts = this.initiativeCheck(actor, combatants);
-                    toasts && toasts.forEach(x => this.sendToHook(x))
-                });
+    }
+
+    init = async () => {
+        this.gameSystem = Object.values(System).filter(x => x.id == game.system.id)[0];
+        this.toastSettings = game.user.flags[moduleId][flagId];
+        if (!this.toastSettings) {
+            game.user.setFlag(moduleId, flagId, { ...ROLLCONFIG_DEFAULT_OPTIONS, ...this.gameSystem.options }).then(x => {
+                Hooks.call(`${moduleId}.settings`)
+            })
+        } else {
+            //only adds hooks if we have roll toasts enabled.
+            if (this.toastSettings.enable) {
+                // ROLL Hooks
+                this.hookIndex[`${moduleId}.postatoast`] =
+                    Hooks.on(`${moduleId}.postatoast`, (toast) => {
+                        this.sendIt(toast);
+                    })
+            }
         }
+
 
     }
 
@@ -75,11 +46,12 @@ export class RollToastController {
         if(toast.shouldSend){
             game.socket.emit(`module.${moduleId}`, toast)
         }
-        if(this.toastSettings.showOwn){
-            Hooks.call(`${moduleId}.postatoast`,toast)
+        if (this.toastSettings.showOwn) {
+            Hooks.call(`${moduleId}.postatoast`, toast)
         }
     }
     socketReceived = (toast) => {
+
         if(toast.gmOnly && !game.user.isGM){
             return;
         }
@@ -92,7 +64,6 @@ export class RollToastController {
         const toast = new RollToast(id, img, title, result, name, adv, dis, crit, fail, (this.toastSettings.toastTimeout * 1000));
         toast.show();
     }
-
     sendIt = (toast) => {
         if (!this.toastSettings.chatShow && isChatActive()) {
             return;

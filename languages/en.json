@@ -12,6 +12,9 @@
         "showAbilityChecks": "Show Ability Checks and Saves",
         "showSkillChecks": "Show Skill Checks",
         "showToolChecks": "Show Tool Checks",
+        "showSaves": "Show Saving Throws",
+        "showDeathSaves": "Show Death Saving Throws",
+        "showPerception": "Show Perception Checks",
         "submit": "Submit Changes"
     }
 }

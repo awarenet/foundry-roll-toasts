@@ -1,4 +1,4 @@
-import { moduleId, flagId, ROLLCONFIG_DEFAULT } from "./utils.js";
+import { moduleId, flagId, ROLLCONFIG_DEFAULT_OPTIONS, System } from "./utils.js";
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api
 
 
@@ -19,19 +19,25 @@ export class RollToastConfigurationForm extends HandlebarsApplicationMixin(Appli
     }
 
     static async submission(event, form, formData) {
-        await game.user.setFlag(moduleId,flagId,formData.object)
-        Hooks.call(`${moduleId}.settings`)
+        await game.user.unsetFlag(moduleId,flagId)
+        // await game.user.setFlag(moduleId,flagId,formData.object)
+        // Hooks.call(`${moduleId}.settings`)
     }
 
     static PARTS = {
-        form: {
-            template: `modules/${moduleId}/templates/toast-config.hbs`
+        pf2e: {
+            template: `modules/${moduleId}/templates/toast-config-pf2e.hbs`
+        },
+        dnd5e: {
+            template: `modules/${moduleId}/templates/toast-config-dnd5e.hbs`
         }
     }
     /** @override */
     async _prepareContext(_options) {
+        const defaultOptions = {...ROLLCONFIG_DEFAULT_OPTIONS,...Object.values(System).filter(x => x.id == game.system.id)[0].options};
         const config = game.user.getFlag(moduleId,flagId);
-        return config?config:ROLLCONFIG_DEFAULT;
+        _options.parts = [game.system.id]
+        return config?config:defaultOptions;
     }
 
 }
