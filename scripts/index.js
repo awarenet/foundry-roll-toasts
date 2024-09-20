@@ -1,9 +1,7 @@
-
-import { moduleId,System } from './utils.js';
 import { RollToastConfigurationForm } from './RollToastConfigurationForm.js'
 import {DnD5eRollToastController } from './DnD5eRollToastController.js'
 import { Pf2eRollToastController } from './Pf2eRollToastController.js';
-
+import { System,moduleId } from './utils.js';
 var rollToastController;
 const setup = () => { 
     if(rollToastController!=null){
@@ -18,7 +16,7 @@ const setup = () => {
             rollToastController = new Pf2eRollToastController();
             break;
         default:
-            console.log("No Valid system for roll toasts.")
+            console.log("No Valid system for roll toasts. The module supports DND 5E and P2FE")
     }
 }
 // CONFIG.debug.hooks = true
@@ -28,10 +26,10 @@ Hooks.once('init', () => {
     document.body.appendChild(elemDiv)
     game.settings.registerMenu(moduleId, "rollToastsMenu", {
         name: "Roll Toasts",
-        label: "User Setup",      // The text label used in the button
-        icon: "fas fa-bars",               // A Font Awesome icon used in the submenu button
-        type: RollToastConfigurationForm,   // A FormApplication subclass
-        restricted: false                   // Restrict this submenu to gamemaster only?
+        label: "User Setup",    
+        icon: "fas fa-bars",              
+        type: RollToastConfigurationForm,  
+        restricted: false        
     });
 
 });

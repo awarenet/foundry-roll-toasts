@@ -1,15 +1,12 @@
 import { RollToastController } from "./RollToastController.js";
-import { System } from "./utils.js";
+import { System,isChatActive } from "./utils.js";
 
 export class Pf2eRollToastController extends RollToastController {
 
     constructor() {
         super();
-        if (this.toastSettings.enable) {
-            this.addListeners();
-            this.types = System.PF2E.types;
-        }
-
+        this.addListeners();
+        this.types = System.PF2E.types;
     }
 
     isGM = (data) => {
@@ -20,14 +17,15 @@ export class Pf2eRollToastController extends RollToastController {
         this.hookIndex['dnd5e.rollAbilitySave'] =
             Hooks.on('preCreateChatMessage', (data,) => {
                 const innerData = data.flags.pf2e.context;
+                if(!data || !data.actor) return;
                 let id = `${data.actor._id}-${data.content}-${Date.now()}`
                 let toast = {
-                    id: id ,
+                    id: id,
                     img: data.actor.img,
                     title: innerData.title,
                     result: data.content,
-                    name: data.actor.name,
-                    adv: false,
+                            name: data.actor.name,
+                            adv: false,
                     dis: false,
                     crit: false,
                     fail: false,

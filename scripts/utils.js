@@ -10,7 +10,6 @@ export const PUBLIC_ROLL = 'publicroll';
 export const GM_ONLY_ROLL = 'gmroll';
 export const ROLLCONFIG_DEFAULT_OPTIONS =
 {
-    "enable": true,
     "chatShow": true,
     "toastTimeout": 3,
     "showOwn": true,
