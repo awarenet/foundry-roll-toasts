@@ -11,7 +11,6 @@ export class RollToastConfigurationForm extends HandlebarsApplicationMixin(Appli
             closeOnSubmit: true
         },
         window: {
-            //contentClasses: ["standard-form"],
             icon: "fa-solid fa-triangle-exclamation",
             title: "ROLLTOAST.configTitle",
 

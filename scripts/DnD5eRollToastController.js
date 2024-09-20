@@ -1,15 +1,12 @@
 import { RollToastController } from "./RollToastController.js";
-import { System, PUBLIC_ROLL,GM_ONLY_ROLL } from "./utils.js";
+import { System, PUBLIC_ROLL, GM_ONLY_ROLL,isChatActive } from "./utils.js";
 
 export class DnD5eRollToastController extends RollToastController {
 
     constructor() {
         super();
-        if (this.toastSettings.enable) {
-            this.addListeners();
-            this.types = System.DND5E.types;
-        }
-        
+        this.addListeners();
+        this.types = System.DND5E.types;
     }
 
     addListeners = () => {
@@ -55,29 +52,29 @@ export class DnD5eRollToastController extends RollToastController {
         if (!this.toastSettings.chatShow && isChatActive()) {
             return;
         }
-        switch(toast.type){
+        switch (toast.type) {
             case this.types.ABI:
-                if(this.toastSettings.abilities)
+                if (this.toastSettings.abilities)
                     this.showToast(toast);
                 break;
             case this.types.ATT:
-                if(this.toastSettings.attacks)
+                if (this.toastSettings.attacks)
                     this.showToast(toast)
                 break;
             case this.types.DMG:
-                if(this.toastSettings.damage)
+                if (this.toastSettings.damage)
                     this.showToast(toast);
                 break;
             case this.types.INI:
-                if(this.toastSettings.initiative)
+                if (this.toastSettings.initiative)
                     this.showToast(toast);
                 break;
             case this.types.SKI:
-                if(this.toastSettings.skill)
+                if (this.toastSettings.skill)
                     this.showToast(toast);
                 break;
             case this.types.TOOL:
-                if(this.toastSettings.tool)
+                if (this.toastSettings.tool)
                     this.showToast(toast);
                 break
             default:
@@ -85,8 +82,8 @@ export class DnD5eRollToastController extends RollToastController {
         }
     }
 
-    shouldItGo = (roll,actor) => {
-        return ((roll.options.rollMode == PUBLIC_ROLL || roll.options.rollMode == GM_ONLY_ROLL)&& actor.type == "character")
+    shouldItGo = (roll, actor) => {
+        return ((roll.options.rollMode == PUBLIC_ROLL || roll.options.rollMode == GM_ONLY_ROLL) && actor.type == "character")
     }
 
     abilityskillCheck = (actor, roll, type) => {
@@ -102,7 +99,7 @@ export class DnD5eRollToastController extends RollToastController {
             crit: roll.isCritical,
             fail: roll.isFumble,
             type: type,
-            shouldSend: this.shouldItGo(roll,actor),
+            shouldSend: this.shouldItGo(roll, actor),
             gmOnly: (roll.options.rollMode == GM_ONLY_ROLL && actor.type == "character"),
         }
         return toast;
@@ -123,7 +120,7 @@ export class DnD5eRollToastController extends RollToastController {
             crit: roll.isCritical,
             fail: roll.isFumble,
             type: type,
-            shouldSend: this.shouldItGo(roll,actor),
+            shouldSend: this.shouldItGo(roll, actor),
             gmOnly: (roll.options.rollMode == GM_ONLY_ROLL && actor.type == "character"),
         }
         return toast;
